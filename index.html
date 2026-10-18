@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Reem+Kufi:wght@600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Great+Vibes&family=Reem+Kufi:wght@600;700&display=swap');
 
         :root {
             --primary-pink: #ff6b8b;
@@ -269,51 +269,49 @@
             background: linear-gradient(45deg, #8a2be2, var(--primary-pink));
         }
 
-        .wish-input-group {
-            margin-top: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+        .creative-quote {
+            font-family: 'Great Vibes', cursive, 'Cairo', sans-serif;
+            font-size: 2.3rem;
+            color: var(--primary-pink);
+            line-height: 1.4;
+            margin-bottom: 10px;
         }
 
-        .wish-input {
-            width: 100%;
-            padding: 14px 18px;
-            border-radius: 15px;
-            border: 2px solid var(--soft-pink);
-            font-family: inherit;
+        .italic-quote {
+            font-style: italic;
+            font-size: 1.15rem;
+            color: #444;
+            margin-bottom: 12px;
+            font-weight: 600;
+            line-height: 1.6;
+        }
+
+        .quote-translation {
             font-size: 1rem;
-            outline: none;
-            transition: border-color 0.3s ease;
-        }
-
-        .wish-input:focus {
-            border-color: var(--primary-pink);
-        }
-
-        .wishes-list {
-            margin-top: 20px;
-            text-align: right;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .wish-card {
-            background: #fff;
-            padding: 15px 20px;
-            border-radius: 18px;
-            border-right: 6px solid var(--primary-pink);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            font-size: 1rem;
-            line-height: 1.7;
-        }
-
-        .wish-card strong {
             color: var(--dark-purple);
-            display: block;
-            margin-bottom: 4px;
+            font-weight: 700;
+            background: rgba(255, 107, 139, 0.1);
+            padding: 8px 15px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        .creative-subtext {
             font-size: 1.05rem;
+            color: #555;
+            line-height: 1.8;
+            font-weight: 600;
+        }
+
+        .rules-badge {
+            display: inline-block;
+            background: #4a154b;
+            color: #ff9ebb;
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-bottom: 15px;
         }
 
         .audio-btn {
@@ -340,42 +338,10 @@
             transform: scale(1.15);
         }
 
-        .heart-counter {
-            background: var(--dark-purple);
-            color: #ff9ebb;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            margin-top: 12px;
-            display: inline-block;
-        }
-
-        /* زر التحكم السري الخاص بكِ لعمل Reset وتصفير الصفحة */
-        .admin-panel {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .reset-btn {
-            background: rgba(74, 21, 75, 0.1);
-            color: var(--dark-purple);
-            border: 1px dashed var(--dark-purple);
-            padding: 8px 20px;
-            font-size: 0.9rem;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .reset-btn:hover {
-            background: var(--dark-purple);
-            color: #fff;
-        }
-
         @media (max-width: 600px) {
             .couple-names { font-size: 2.5rem; }
             .cover-screen h1 { font-size: 2.5rem; }
+            .creative-quote { font-size: 1.9rem; }
             .timer-box { min-width: 65px; padding: 10px 5px; }
             .timer-box span.number { font-size: 1.4rem; }
         }
@@ -386,7 +352,7 @@
     <canvas id="particle-canvas"></canvas>
 
     <!-- الأغنية المحلية -->
-    <audio id="bg-audio" loop preload="auto">
+    <audio id="bg-audio" preload="auto" loop>
         <source src="song.mp3" type="audio/mp3">
     </audio>
 
@@ -415,7 +381,7 @@
             </p>
             
             <div class="highlight-box">
-                💃 جهزوا نفسكم لليلة كلها زغاريد ورقص وفرحة من القلب!<br>
+                💃 جهزوا نفسكم لليلة كلها زغاريط ورقص وفرحة من القلب!<br>
                 مستنيينكم في يوم مميز نفرح فيه كلنا بـ "ريهام" أحلى عروسة ❤️
             </div>
         </div>
@@ -451,34 +417,27 @@
             <button class="interactive-btn confetti-btn" onclick="launchConfetti()">
                 🎉 افرقعي مفرقعات احتفالية!
             </button>
-
-            <div class="heart-counter" id="heartCounter">💖 تم إرسال 0 حب للعروسة</div>
         </div>
 
-        <!-- Wish Wall Card -->
+        <!-- Card 1: English Wish for the Bride with Italic Style & Translation -->
         <div class="card">
-            <h2 class="section-heading">💌 جدار أمنيات الصحبات لريهام</h2>
-            <p style="color: #666; font-size: 0.95rem;">اكتبي كلمة حلوة أو أمنية للعروسة لتظهر مباشرة وتفضل متسجلة على الجدار! ✨</p>
-            
-            <div class="wish-input-group">
-                <input type="text" id="friendName" class="wish-input" placeholder="اسمكِ يا قمر...">
-                <textarea id="friendMessage" class="wish-input" rows="2" placeholder="كلمة من القلب للعروسة ريهام..."></textarea>
-                
-                <button class="interactive-btn" onclick="addWishOnPage()">
-                    💖 انشري أمنيتكِ للعروسة الآن
-                </button>
-            </div>
-
-            <div class="wishes-list" id="wishesList">
-                <!-- الرسائل المخزنة ستظهر هنا -->
+            <div class="creative-quote">A Special Wish for Reham 💕</div>
+            <p class="italic-quote">
+                <i>"May your life together be filled with endless love, laughter, and unforgettable moments. Wishing the most beautiful bride-to-be a lifetime of happiness!"</i>
+            </p>
+            <div class="quote-translation">
+                «عسى أن تكون حياتكما معاً مليئة بالحب والضحكات واللحظات التي لا تُنسى، وحياة مليئة بالسعادة الدائمة لأجمل عروس!» ✨
             </div>
         </div>
 
-        <!-- زر تحكم خاص بكِ لمسح البيانات وتصفير الصفحة متى شئتِ -->
-        <div class="admin-panel">
-            <button class="reset-btn" onclick="resetPageData()">
-                ⚙️ تصفير العداد والرسائل (خاص بالتحكم)
-            </button>
+        <!-- Card 2: Henna Night Vibes & Rules -->
+        <div class="card">
+            <span class="rules-badge">👑 Henna Night Vibes</span>
+            <h2 class="section-heading">قانون ليلة الحنة 💃</h2>
+            <p class="creative-subtext">
+                ممنوع الزعل، ممنوع الهدوء، والفرحة إجباري للكل! 🎉<br>
+                جهزي الفستان والضحكة العالية وجهزي الزغاريط.. عشان ليلتنا للعروسة ريهام مش هتتنسى ✨
+            </p>
         </div>
 
     </div>
@@ -493,23 +452,15 @@
         const audio = document.getElementById('bg-audio');
         const audioBtn = document.getElementById('audioBtn');
         let isPlaying = false;
-        let heartCount = 0;
-
-        if (localStorage.getItem('savedHeartCount')) {
-            heartCount = parseInt(localStorage.getItem('savedHeartCount'));
-        }
-
-        function updateHeartDisplay() {
-            document.getElementById('heartCounter').innerText = `💖 تم إرسال ${heartCount} حب للعروسة`;
-            localStorage.setItem('savedHeartCount', heartCount);
-        }
 
         function openInvitation() {
-            document.getElementById('coverScreen').classList.add('hide');
+            audio.load();
             audio.play().then(() => {
                 isPlaying = true;
                 audioBtn.innerText = '⏸️';
-            }).catch(err => console.log(err));
+            }).catch(err => console.log("Audio play blocked:", err));
+
+            document.getElementById('coverScreen').classList.add('hide');
             launchConfetti();
             triggerHearts();
         }
@@ -562,57 +513,9 @@
             }
         }
 
-        function loadWishes() {
-            const wishesList = document.getElementById('wishesList');
-            const savedWishes = JSON.parse(localStorage.getItem('savedWishes')) || [];
-
-            wishesList.innerHTML = '';
-            savedWishes.forEach(item => {
-                const wishDiv = document.createElement('div');
-                wishDiv.className = 'wish-card';
-                wishDiv.innerHTML = `<strong>${item.name} ✨</strong>${item.msg}`;
-                wishesList.appendChild(wishDiv);
-            });
-        }
-
-        function addWishOnPage() {
-            const name = document.getElementById('friendName').value.trim();
-            const msg = document.getElementById('friendMessage').value.trim();
-
-            if (!name || !msg) {
-                alert('اكتبي اسمكِ والأمنية يا قمر الأول! 💕');
-                return;
-            }
-
-            const savedWishes = JSON.parse(localStorage.getItem('savedWishes')) || [];
-
-            savedWishes.unshift({ name, msg });
-            localStorage.setItem('savedWishes', JSON.stringify(savedWishes));
-
-            loadWishes();
-
-            document.getElementById('friendName').value = '';
-            document.getElementById('friendMessage').value = '';
-
-            launchConfetti();
-            triggerHearts();
-        }
-
-        // دالة التحكم الخاصة بكِ لتصفير ومسح كل شيء متى شئتِ
-        function resetPageData() {
-            if (confirm('هل أنت متأكدة من رغبتك في تصفير العداد ومسح جميع الرسائل والبدء من جديد؟')) {
-                localStorage.removeItem('savedWishes');
-                localStorage.removeItem('savedHeartCount');
-                heartCount = 0;
-                updateHeartDisplay();
-                loadWishes();
-                alert('تم تصفير الصفحة بنجاح وجعلها نظيفة من جديد! ✨');
-            }
-        }
-
-        // Interactive Click Heart
+        // تفاعل القلوب والورد عند الضغط
         document.addEventListener('click', function(e) {
-            if (e.target.closest('.open-btn') || e.target.closest('.audio-btn') || e.target.closest('input') || e.target.closest('textarea') || e.target.closest('button')) return;
+            if (e.target.closest('.open-btn') || e.target.closest('.audio-btn') || e.target.closest('button')) return;
             
             const emojis = ['💖', '🌸', '✨', '🌹', '💃', '💕'];
             const emoji = emojis[Math.floor(Math.random() * emojis.length)];
@@ -625,9 +528,6 @@
             
             document.body.appendChild(el);
             setTimeout(() => el.remove(), 1000);
-            
-            heartCount++;
-            updateHeartDisplay();
         });
 
         function triggerHearts() {
@@ -645,8 +545,6 @@
                     setTimeout(() => el.remove(), 1000);
                 }, i * 80);
             }
-            heartCount += 10;
-            updateHeartDisplay();
         }
 
         /* Falling Particles Canvas */
@@ -691,8 +589,6 @@
         }
 
         window.onload = function() {
-            updateHeartDisplay();
-            loadWishes();
             animateParticles();
         };
     </script>
