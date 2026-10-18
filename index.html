@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ليلة حنة أحلى عروسة | ريهام & أحمد 💃✨</title>
+    
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Reem+Kufi:wght@600;700&display=swap');
+
+        :root {
+            --primary-pink: #ff6b8b;
+            --soft-pink: #ffe6ea;
+            --rose-gold: #e8a598;
+            --gold: #d4af37;
+            --dark-purple: #4a154b;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --shadow: 0 15px 35px rgba(255, 107, 139, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Cairo', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #fff0f3 0%, #ffe6ea 50%, #fff5f6 100%);
+            color: #333;
+            overflow-x: hidden;
+            line-height: 1.8;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .click-heart {
+            position: fixed;
+            pointer-events: none;
+            font-size: 1.8rem;
+            animation: floatUp 1s ease-out forwards;
+            z-index: 99999;
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.8) rotate(0deg); }
+            100% { opacity: 0; transform: translate(-50%, -120px) scale(1.5) rotate(25deg); }
+        }
+
+        .cover-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #4a154b 0%, #ff6b8b 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 999999;
+            color: #fff;
+            text-align: center;
+            transition: all 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+            padding: 20px;
+        }
+
+        .cover-screen.hide {
+            transform: translateY(-100%) scale(0.9);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .cover-badge {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 8px 22px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .cover-screen h1 {
+            font-size: 3.2rem;
+            color: #fff;
+            margin-bottom: 12px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.25);
+            font-weight: 800;
+        }
+
+        .cover-screen p {
+            font-size: 1.3rem;
+            margin-bottom: 35px;
+            color: #ffe6ea;
+        }
+
+        .open-btn {
+            background: #fff;
+            color: var(--primary-pink);
+            border: none;
+            padding: 16px 45px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .open-btn:hover {
+            transform: scale(1.08);
+            background: #ffe6ea;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.35);
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 40px 20px 80px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 25px;
+            padding: 40px 25px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border: 2px solid rgba(255, 107, 139, 0.25);
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .header-tag {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--primary-pink), var(--rose-gold));
+            color: white;
+            padding: 8px 24px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(255, 107, 139, 0.3);
+        }
+
+        .couple-names {
+            font-size: 3.2rem;
+            color: var(--dark-purple);
+            margin: 10px 0;
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        .couple-names span {
+            color: var(--primary-pink);
+        }
+
+        .friend-welcome {
+            font-size: 1.2rem;
+            color: #444;
+            margin: 20px 0;
+            font-weight: 600;
+            line-height: 1.9;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fff0f3, #ffe6ea);
+            border-radius: 18px;
+            padding: 22px;
+            margin-top: 20px;
+            border: 2px dashed var(--primary-pink);
+            font-size: 1.1rem;
+            color: var(--dark-purple);
+            font-weight: 700;
+        }
+
+        .section-heading {
+            font-size: 1.6rem;
+            color: var(--dark-purple);
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+
+        .date-display {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary-pink);
+            margin-bottom: 25px;
+            background: rgba(255, 107, 139, 0.12);
+            display: inline-block;
+            padding: 8px 25px;
+            border-radius: 30px;
+        }
+
+        .timer {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            direction: ltr;
+        }
+
+        .timer-box {
+            background: linear-gradient(135deg, var(--dark-purple), #2c0e30);
+            color: #fff;
+            padding: 16px 10px;
+            border-radius: 16px;
+            min-width: 75px;
+            box-shadow: 0 8px 20px rgba(74, 21, 75, 0.25);
+        }
+
+        .timer-box span.number {
+            display: block;
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: #ff9ebb;
+        }
+
+        .timer-box span.label {
+            font-size: 0.85rem;
+            color: #eee;
+        }
+
+        .interactive-btn {
+            background: linear-gradient(45deg, var(--primary-pink), var(--rose-gold));
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(255, 107, 139, 0.4);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .interactive-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 107, 139, 0.6);
+        }
+
+        .confetti-btn {
+            background: linear-gradient(45deg, #8a2be2, var(--primary-pink));
+        }
+
+        .wish-input-group {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .wish-input {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 15px;
+            border: 2px solid var(--soft-pink);
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .wish-input:focus {
+            border-color: var(--primary-pink);
+        }
+
+        .wishes-list {
+            margin-top: 20px;
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .wish-card {
+            background: #fff;
+            padding: 15px 20px;
+            border-radius: 18px;
+            border-right: 6px solid var(--primary-pink);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .wish-card strong {
+            color: var(--dark-purple);
+            display: block;
+            margin-bottom: 4px;
+            font-size: 1.05rem;
+        }
+
+        .audio-btn {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(45deg, var(--primary-pink), var(--dark-purple));
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border: 2px solid #fff;
+            font-size: 1.4rem;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.15);
+        }
+
+        .heart-counter {
+            background: var(--dark-purple);
+            color: #ff9ebb;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-top: 12px;
+            display: inline-block;
+        }
+
+        /* زر التحكم السري الخاص بكِ لعمل Reset وتصفير الصفحة */
+        .admin-panel {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .reset-btn {
+            background: rgba(74, 21, 75, 0.1);
+            color: var(--dark-purple);
+            border: 1px dashed var(--dark-purple);
+            padding: 8px 20px;
+            font-size: 0.9rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: var(--dark-purple);
+            color: #fff;
+        }
+
+        @media (max-width: 600px) {
+            .couple-names { font-size: 2.5rem; }
+            .cover-screen h1 { font-size: 2.5rem; }
+            .timer-box { min-width: 65px; padding: 10px 5px; }
+            .timer-box span.number { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- الأغنية المحلية -->
+    <audio id="bg-audio" loop preload="auto">
+        <source src="song.mp3" type="audio/mp3">
+    </audio>
+
+    <!-- Cover Screen Overlay -->
+    <div class="cover-screen" id="coverScreen">
+        <div class="cover-badge">✨ ليلة الحنة المنتظرة ✨</div>
+        <h1>أحمد & ريهام</h1>
+        <p>دعوة خاصة لأغلى الصحبات والحبايب 💃🌸</p>
+        <button class="open-btn" onclick="openInvitation()">
+            ✉️ افتحي الدعوة يا قمر
+        </button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        
+        <!-- Main Card -->
+        <div class="card">
+            <span class="header-tag">🌸 Henna Night Celebration 🌸</span>
+            
+            <h1 class="couple-names">أحمد & <span>ريهام</span></h1>
+            
+            <p class="friend-welcome">
+                يا هلا بأحلى صحبات في الدنيا! 💕<br>
+                ليلة الحنة ما تكملش من غير لمة صحبات العروسة وضحكتكم الجريئة وفرحتكم الصافية ✨
+            </p>
+            
+            <div class="highlight-box">
+                💃 جهزوا نفسكم لليلة كلها زغاريد ورقص وفرحة من القلب!<br>
+                مستنيينكم في يوم مميز نفرح فيه كلنا بـ "ريهام" أحلى عروسة ❤️
+            </div>
+        </div>
+
+        <!-- Countdown Card -->
+        <div class="card">
+            <h2 class="section-heading">⏳ العد التنازلي لليلة الحنة</h2>
+            <div class="date-display">📅 الأحد، 8 نوفمبر 2026</div>
+            
+            <div class="timer">
+                <div class="timer-box">
+                    <span class="number" id="days">00</span>
+                    <span class="label">يوم</span>
+                </div>
+                <div class="timer-box">
+                    <span class="number" id="hours">00</span>
+                    <span class="label">ساعة</span>
+                </div>
+                <div class="timer-box">
+                    <span class="number" id="minutes">00</span>
+                    <span class="label">دقيقة</span>
+                </div>
+                <div class="timer-box">
+                    <span class="number" id="seconds">00</span>
+                    <span class="label">ثانية</span>
+                </div>
+            </div>
+
+            <br>
+            <button class="interactive-btn" onclick="triggerHearts()">
+                ✨ ابعتي حب ورشّة ورد للعروسة 🌸
+            </button>
+            <button class="interactive-btn confetti-btn" onclick="launchConfetti()">
+                🎉 افرقعي مفرقعات احتفالية!
+            </button>
+
+            <div class="heart-counter" id="heartCounter">💖 تم إرسال 0 حب للعروسة</div>
+        </div>
+
+        <!-- Wish Wall Card -->
+        <div class="card">
+            <h2 class="section-heading">💌 جدار أمنيات الصحبات لريهام</h2>
+            <p style="color: #666; font-size: 0.95rem;">اكتبي كلمة حلوة أو أمنية للعروسة لتظهر مباشرة وتفضل متسجلة على الجدار! ✨</p>
+            
+            <div class="wish-input-group">
+                <input type="text" id="friendName" class="wish-input" placeholder="اسمكِ يا قمر...">
+                <textarea id="friendMessage" class="wish-input" rows="2" placeholder="كلمة من القلب للعروسة ريهام..."></textarea>
+                
+                <button class="interactive-btn" onclick="addWishOnPage()">
+                    💖 انشري أمنيتكِ للعروسة الآن
+                </button>
+            </div>
+
+            <div class="wishes-list" id="wishesList">
+                <!-- الرسائل المخزنة ستظهر هنا -->
+            </div>
+        </div>
+
+        <!-- زر تحكم خاص بكِ لمسح البيانات وتصفير الصفحة متى شئتِ -->
+        <div class="admin-panel">
+            <button class="reset-btn" onclick="resetPageData()">
+                ⚙️ تصفير العداد والرسائل (خاص بالتحكم)
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Floating Audio Button -->
+    <div class="audio-btn" id="audioBtn" onclick="toggleAudio()" title="تشغيل / إيقاف الموسيقى">
+        🎵
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        const audio = document.getElementById('bg-audio');
+        const audioBtn = document.getElementById('audioBtn');
+        let isPlaying = false;
+        let heartCount = 0;
+
+        if (localStorage.getItem('savedHeartCount')) {
+            heartCount = parseInt(localStorage.getItem('savedHeartCount'));
+        }
+
+        function updateHeartDisplay() {
+            document.getElementById('heartCounter').innerText = `💖 تم إرسال ${heartCount} حب للعروسة`;
+            localStorage.setItem('savedHeartCount', heartCount);
+        }
+
+        function openInvitation() {
+            document.getElementById('coverScreen').classList.add('hide');
+            audio.play().then(() => {
+                isPlaying = true;
+                audioBtn.innerText = '⏸️';
+            }).catch(err => console.log(err));
+            launchConfetti();
+            triggerHearts();
+        }
+
+        function toggleAudio() {
+            if (isPlaying) {
+                audio.pause();
+                audioBtn.innerText = '🎵';
+            } else {
+                audio.play();
+                audioBtn.innerText = '⏸️';
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Countdown Timer Logic
+        const targetDate = new Date('November 8, 2026 00:00:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            if (difference > 0) {
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                document.getElementById('days').innerText = days < 10 ? '0' + days : days;
+                document.getElementById('hours').innerText = hours < 10 ? '0' + hours : hours;
+                document.getElementById('minutes').innerText = minutes < 10 ? '0' + minutes : minutes;
+                document.getElementById('seconds').innerText = seconds < 10 ? '0' + seconds : seconds;
+            } else {
+                document.getElementById('days').innerText = '00';
+                document.getElementById('hours').innerText = '00';
+                document.getElementById('minutes').innerText = '00';
+                document.getElementById('seconds').innerText = '00';
+            }
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        function launchConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+
+        function loadWishes() {
+            const wishesList = document.getElementById('wishesList');
+            const savedWishes = JSON.parse(localStorage.getItem('savedWishes')) || [];
+
+            wishesList.innerHTML = '';
+            savedWishes.forEach(item => {
+                const wishDiv = document.createElement('div');
+                wishDiv.className = 'wish-card';
+                wishDiv.innerHTML = `<strong>${item.name} ✨</strong>${item.msg}`;
+                wishesList.appendChild(wishDiv);
+            });
+        }
+
+        function addWishOnPage() {
+            const name = document.getElementById('friendName').value.trim();
+            const msg = document.getElementById('friendMessage').value.trim();
+
+            if (!name || !msg) {
+                alert('اكتبي اسمكِ والأمنية يا قمر الأول! 💕');
+                return;
+            }
+
+            const savedWishes = JSON.parse(localStorage.getItem('savedWishes')) || [];
+
+            savedWishes.unshift({ name, msg });
+            localStorage.setItem('savedWishes', JSON.stringify(savedWishes));
+
+            loadWishes();
+
+            document.getElementById('friendName').value = '';
+            document.getElementById('friendMessage').value = '';
+
+            launchConfetti();
+            triggerHearts();
+        }
+
+        // دالة التحكم الخاصة بكِ لتصفير ومسح كل شيء متى شئتِ
+        function resetPageData() {
+            if (confirm('هل أنت متأكدة من رغبتك في تصفير العداد ومسح جميع الرسائل والبدء من جديد؟')) {
+                localStorage.removeItem('savedWishes');
+                localStorage.removeItem('savedHeartCount');
+                heartCount = 0;
+                updateHeartDisplay();
+                loadWishes();
+                alert('تم تصفير الصفحة بنجاح وجعلها نظيفة من جديد! ✨');
+            }
+        }
+
+        // Interactive Click Heart
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.open-btn') || e.target.closest('.audio-btn') || e.target.closest('input') || e.target.closest('textarea') || e.target.closest('button')) return;
+            
+            const emojis = ['💖', '🌸', '✨', '🌹', '💃', '💕'];
+            const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            const el = document.createElement('div');
+            el.className = 'click-heart';
+            el.innerText = emoji;
+            el.style.left = e.clientX + 'px';
+            el.style.top = e.clientY + 'px';
+            
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 1000);
+            
+            heartCount++;
+            updateHeartDisplay();
+        });
+
+        function triggerHearts() {
+            for (let i = 0; i < 12; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight;
+                    const emojis = ['💖', '🌸', '✨', '🌹', '🎉'];
+                    const el = document.createElement('div');
+                    el.className = 'click-heart';
+                    el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                    el.style.left = x + 'px';
+                    el.style.top = y + 'px';
+                    document.body.appendChild(el);
+                    setTimeout(() => el.remove(), 1000);
+                }, i * 80);
+            }
+            heartCount += 10;
+            updateHeartDisplay();
+        }
+
+        /* Falling Particles Canvas */
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const particles = [];
+        const particleItems = ['🌸', '💖', '✨', '🌷'];
+
+        for (let i = 0; i < 25; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 18 + 12,
+                speedY: Math.random() * 1.2 + 0.5,
+                speedX: Math.random() * 0.6 - 0.3,
+                text: particleItems[Math.floor(Math.random() * particleItems.length)]
+            });
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                ctx.font = `${p.size}px serif`;
+                ctx.fillText(p.text, p.x, p.y);
+                p.y += p.speedY;
+                p.x += p.speedX;
+
+                if (p.y > canvas.height + 20) {
+                    p.y = -20;
+                    p.x = Math.random() * canvas.width;
+                }
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        window.onload = function() {
+            updateHeartDisplay();
+            loadWishes();
+            animateParticles();
+        };
+    </script>
+</body>
+</html>
